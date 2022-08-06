@@ -79,8 +79,12 @@ keys = [
     Key([mod, "shift"], "c", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "shift"], "q", lazy.reload_config(), desc="Reload the config"),
     Key([mod], "p", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    # Sound
+    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -c 0 sset Master 1- unmute")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -c 0 sset Master 1+ unmute")),
 ]
-#Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+# Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
 
 groups = [Group(i) for i in "123456789"]
 
@@ -155,7 +159,7 @@ screens = [
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
         ),
     ),
-     Screen(
+    Screen(
         top=bar.Bar(
             [
                 widget.CurrentLayout(),
