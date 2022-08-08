@@ -3,16 +3,16 @@ from libqtile.widget.textbox import TextBox
 from libqtile import bar, widget
 from libqtile.config import Screen
 
-#load from env
+# load from env
 CITY_CODE = os.getenv("CITY_CODE_WEATHER")
-BORDER_FOCUS = "#8FF0BC"
-BORDER_NORMAL = "#17724B"
+BORDER_FOCUS = "#a2aacb"
+BORDER_NORMAL = "#4F5363"
 COLORS = [
     ["#17724B", "#25B576"],  # 0
     ["#0D412B", "#17724B"],  # 1
-    ["#2f3e46", "#2f3e46"],  # 2 BAR DEFAULT COLOR
+    ["#424656", "#424656"],  # 2 BAR DEFAULT COLOR
     ["#ffffff", "#ffffff"],  # 3 WHITE
-    ["218177", "218177"],  # 4 when workspace is selected
+    ["#58739b", "#58739b"],  # 4 when workspace is selected and ARROWS
     ["000000", "000000"],  # 5 BLACK when workspace is not selected
     ["218177", "218177"],  # 6 right side of the bar
 ]
@@ -152,7 +152,7 @@ SCREEN1 = Screen(
             ),
             LEFT_ARROW_BACK,
             LEFT_ARROW_FRONT,
-             widget.TextBox(
+            widget.TextBox(
                 font="DejaVuSansMono Nerd Font Mono",
                 text="\uf025",
                 fontsize=25,

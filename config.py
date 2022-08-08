@@ -32,7 +32,7 @@ from libqtile.utils import guess_terminal
 from libqtile import hook, layout
 from libqtile.dgroups import simple_key_binder
 from libqtile.log_utils import logger
-from jx_bar_green import SCREEN1, SCREEN2
+from jx_bar_blue import SCREEN1, SCREEN2, BORDER_FOCUS, BORDER_NORMAL
 
 logger.setLevel(logging.INFO)
 
@@ -47,8 +47,8 @@ def init_layout_theme():
     return {
         "margin": 5,
         "border_width": 1,
-        "border_focus": "#8FF0BC",
-        "border_normal": "#17724B",
+        "border_focus": BORDER_FOCUS,
+        "border_normal": BORDER_NORMAL,
     }
 
 
