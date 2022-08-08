@@ -1,6 +1,10 @@
+import os
 from libqtile.widget.textbox import TextBox
 from libqtile import bar, widget
 from libqtile.config import Screen
+
+#load from env
+CITY_CODE = os.getenv("CITY_CODE_WEATHER")
 
 COLORS = [
     ["#17724B", "#25B576"],  # 0
@@ -64,50 +68,114 @@ SCREEN1 = Screen(
             ),
             widget.GroupBox(**GROUP_LAYOUT),
             widget.CurrentLayout(background=COLORS[2]),
-            widget.Prompt(
-                background=COLORS[2],
-            ),
             widget.WindowName(background=COLORS[2], padding=0),
-            widget.Chord(
-                chords_colors={
-                    "launch": ("#ff0000", "#ffffff"),
-                },
-                name_transform=lambda name: name.upper(),
-            ),
-            LEFT_ARROW_FRONT,
-            widget.Systray(background=COLORS[4], padding=5),
-            widget.TextBox(
-                font="DejaVuSansMono Nerd Font Mono",
-                text="\uf1eb",
-                fontsize=27,
-                foreground=COLORS[3],
-                background=COLORS[4],
-            ),
-            widget.Net(
-                interface="wlan0",
-                format="{down} ↓↑ {up}",
-                foreground=COLORS[3],
-                background=COLORS[4],
-                padding=0,
-            ),
-            LEFT_ARROW_BACK,
-            widget.Sep(linewidth=30, foreground=COLORS[2], background=COLORS[2]),
             LEFT_ARROW_FRONT,
             widget.TextBox(
                 # thermal icon
                 font="DejaVuSansMono Nerd Font Mono",
+                text="\ue350",
+                fontsize=18,
+                foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            widget.OpenWeather(
+                cityid=CITY_CODE,
+                format="{main_temp} °{units_temperature} {humidity}% {weather_details}",
+                foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            LEFT_ARROW_BACK,
+            LEFT_ARROW_FRONT,
+            widget.CryptoTicker(
+                crypto="BTC",
+                foreground=COLORS[3],
+                background=COLORS[4],
+                symbol="$",
+                update_interval=300,
+                currency="USD",
+            ),
+            LEFT_ARROW_BACK,
+            LEFT_ARROW_FRONT,
+            widget.TextBox(
+                font="DejaVuSansMono Nerd Font Mono",
+                text="\uf2db",
+                fontsize=20,
+                foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            widget.Memory(
+                format="{MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}",
+                measure_mem="G",
+                foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            widget.Sep(
+                linewidth=1,
+                padding=6,
+                foreground=COLORS[1],
+                background=COLORS[4],
+            ),
+            widget.TextBox(
+                # thermal icon
+                font="DejaVuSansMono Nerd Font Mono",
                 text="\uf8c7",
-                fontsize=30,
+                fontsize=25,
                 foreground=COLORS[3],
                 background=COLORS[4],
             ),
             widget.ThermalSensor(
                 foreground=COLORS[3],
                 background=COLORS[4],
-                threshold=90,
-                fmt="{}",
+                threshold=80,
+                tag_sensor="Package id 0",
+                fmt="CPU {}",
                 padding=5,
             ),
+            widget.Sep(
+                linewidth=1,
+                padding=6,
+                foreground=COLORS[1],
+                background=COLORS[4],
+            ),
+            widget.TextBox(
+                font="DejaVuSansMono Nerd Font Mono",
+                text="\uf109",
+                fontsize=20,
+                foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            widget.CPU(
+                format="CPU {freq_current}GHz {load_percent}%",
+                foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            LEFT_ARROW_BACK,
+            LEFT_ARROW_FRONT,
+             widget.TextBox(
+                font="DejaVuSansMono Nerd Font Mono",
+                text="\uf025",
+                fontsize=25,
+                foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            widget.PulseVolume(
+                fmt="{}",
+                foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            widget.Sep(
+                linewidth=1,
+                padding=6,
+                foreground=COLORS[1],
+                background=COLORS[4],
+            ),
+            widget.Wlan(
+                foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            LEFT_ARROW_BACK,
+            widget.Sep(linewidth=30, foreground=COLORS[2], background=COLORS[2]),
+            LEFT_ARROW_FRONT,
             widget.TextBox(
                 font="DejaVuSansMono Nerd Font Mono",
                 text="\uf073",
@@ -116,11 +184,12 @@ SCREEN1 = Screen(
                 background=COLORS[4],
             ),
             widget.Clock(
-                format="%B %d %Y %a %H:%M",
+                format="%d/%m/%Y %H:%M",
                 background=COLORS[4],
             ),
             widget.Sep(
-                foreground=COLORS[3],
+                linewidth=10,
+                foreground=COLORS[4],
                 background=COLORS[4],
             ),
             widget.QuickExit(
@@ -129,6 +198,7 @@ SCREEN1 = Screen(
                 fontsize=25,
                 background=COLORS[4],
             ),
+            widget.Systray(background=COLORS[2], padding=5),
         ],
         20,
     ),
