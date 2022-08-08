@@ -26,14 +26,13 @@
 
 import logging
 import subprocess
-from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, Group, Key, Match
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-from libqtile import hook
+from libqtile import hook, layout
 from libqtile.dgroups import simple_key_binder
 from libqtile.log_utils import logger
-from config_resources import COLORS, LEFT_ARROW_BACK, LEFT_ARROW_FRONT, GROUP_LAYOUT
+from jx_bar import SCREEN1, SCREEN2
 
 logger.setLevel(logging.INFO)
 
@@ -141,17 +140,17 @@ if __name__ in ["config", "__main__"]:
     dgroups_key_binder = simple_key_binder("mod4")
 
     layouts = [
-        layout.Columns(**layout_theme),
         layout.Max(),
         layout.MonadTall(**layout_theme),
+        layout.Columns(**layout_theme),
+        # layout.TreeTab(**layout_theme),
+        # layout.Bsp(**layout_theme),
+        # layout.MonadWide(**layout_theme),
         # Try more layouts by unleashing below layouts.
         # layout.Stack(num_stacks=3),
-        layout.Bsp(border_focus="60a49c", border_normal="7CA39F"),
         # layout.Matrix(),
-        layout.MonadWide(**layout_theme),
         # layout.RatioTile(),
-        # layout.Tile(),
-        # layout.TreeTab(),
+        # layout.Tile(**layout_theme),
         # layout.VerticalTile(),
         # layout.Zoomy(),
     ]
@@ -163,101 +162,8 @@ if __name__ in ["config", "__main__"]:
     )
     extension_defaults = widget_defaults.copy()
 
-    # screen bars ------------------------------
-    screens = [
-        Screen(
-            top=bar.Bar(
-                [
-                    widget.Sep(
-                        linewidth=0,
-                        padding=6,
-                        foreground=COLORS[4],
-                        background=COLORS[4],
-                    ),
-                    widget.GroupBox(**GROUP_LAYOUT),
-                    widget.CurrentLayout(background=COLORS[2]),
-                    widget.Prompt(
-                        background=COLORS[2],
-                    ),
-                    widget.WindowName(background=COLORS[2], padding=0),
-                    widget.Chord(
-                        chords_colors={
-                            "launch": ("#ff0000", "#ffffff"),
-                        },
-                        name_transform=lambda name: name.upper(),
-                    ),
-                    LEFT_ARROW_FRONT,
-                    widget.Systray(background=COLORS[4], padding=5),
-                    widget.TextBox(
-                        font="DejaVuSansMono Nerd Font Mono",
-                        text="\uf1eb",
-                        fontsize=27,
-                        foreground=COLORS[3],
-                        background=COLORS[4],
-                    ),
-                    widget.Net(
-                        interface="wlan0",
-                        format="{down} ↓↑ {up}",
-                        foreground=COLORS[3],
-                        background=COLORS[4],
-                        padding=0,
-                    ),
-                    LEFT_ARROW_BACK,
-                    widget.Sep(
-                        linewidth=30, foreground=COLORS[2], background=COLORS[2]
-                    ),
-                    LEFT_ARROW_FRONT,
-                    widget.TextBox(
-                        # thermal icon
-                        font="DejaVuSansMono Nerd Font Mono",
-                        text="\uf8c7",
-                        fontsize=30,
-                        foreground=COLORS[3],
-                        background=COLORS[4],
-                    ),
-                    widget.ThermalSensor(
-                        foreground=COLORS[3],
-                        background=COLORS[4],
-                        threshold=90,
-                        fmt="{}",
-                        padding=5,
-                    ),
-                    widget.TextBox(
-                        font="DejaVuSansMono Nerd Font Mono",
-                        text="\uf073",
-                        fontsize=30,
-                        foreground=COLORS[3],
-                        background=COLORS[4],
-                    ),
-                    widget.Clock(
-                        format="%B %d %Y %a %H:%M",
-                        background=COLORS[4],
-                    ),
-                    widget.Sep(
-                        foreground=COLORS[3],
-                        background=COLORS[4],
-                    ),
-                    widget.QuickExit(
-                        default_text="\uf011",
-                        countdown_format="{}",
-                        fontsize=25,
-                        background=COLORS[4],
-                    ),
-                ],
-                20,
-            ),
-        ),
-        Screen(
-            top=bar.Bar(
-                [
-                    widget.CurrentLayout(background=COLORS[2]),
-                    widget.GroupBox(**GROUP_LAYOUT),
-                    widget.WindowName(background=COLORS[2], padding=0),
-                ],
-                20,
-            ),
-        ),
-    ]
+    # screen and bars
+    screens = [SCREEN1, SCREEN2]
 
     # Drag floating layouts.
     mouse = [
