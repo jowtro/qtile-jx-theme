@@ -31,8 +31,8 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import hook
-
 from libqtile.log_utils import logger
+from config_resources import COLORS
 
 logger.setLevel(logging.INFO)
 
@@ -42,6 +42,16 @@ def autostart():
     # add nitrogen to the qtile startup
     subprocess.Popen(["nitrogen", "--restore"])
 
+
+def init_layout_theme():
+    return {
+        "margin": 5,
+        "border_width": 2,
+        "border_focus": "#25B576",
+        "border_normal": "#17724B",
+    }
+
+layout_theme = init_layout_theme()
 
 if __name__ in ["config", "__main__"]:
     mod = "mod4"
@@ -139,19 +149,15 @@ if __name__ in ["config", "__main__"]:
                     lazy.window.togroup(i.name, switch_group=False),
                     desc="Switch to & move focused window to group {}".format(i.name),
                 ),
-                # Or, use below if you prefer not to switch to that group.
-                # # mod1 + shift + letter of group = move focused window to group
-                # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-                #     desc="move focused window to group {}".format(i.name)),
             ]
         )
 
     layouts = [
-        layout.Columns(border_focus_stack=["#32a852", "#32a877"], border_width=4),
+        layout.Columns(**layout_theme),
         layout.Max(),
         # Try more layouts by unleashing below layouts.
         layout.Stack(num_stacks=3),
-        layout.Bsp(),
+        layout.Bsp(border_focus="60a49c", border_normal="7CA39F"),
         # layout.Matrix(),
         # layout.MonadTall(),
         # layout.MonadWide(),
@@ -169,24 +175,60 @@ if __name__ in ["config", "__main__"]:
     )
     extension_defaults = widget_defaults.copy()
 
+    # screen bars ------------------------------
     screens = [
         Screen(
             top=bar.Bar(
                 [
-                    widget.CurrentLayout(),
-                    widget.GroupBox(),
-                    widget.Prompt(),
-                    widget.WindowName(),
+                    widget.Sep(
+                        linewidth=0,
+                        padding=6,
+                        foreground=COLORS[0],
+                        background=COLORS[0],
+                    ),
+                    widget.GroupBox(
+                        rounded=False,
+                        font="Ubuntu Bold",
+                        fontsize=12,
+                        borderwidth=1,
+                        active=COLORS[3],
+                        inactive=COLORS[3],
+                        highlight_method="block",
+                        highlight_color=COLORS[4],
+                        other_screen_border=COLORS[5],
+                        foreground=COLORS[3],
+                        background=COLORS[2],
+                    ),
+                    widget.CurrentLayout(
+                        background=COLORS[2],
+                    ),
+                    widget.Prompt(
+                        background=COLORS[2],
+                    ),
+                    widget.WindowName(
+                        background=COLORS[2],
+                        borderwidth=1,
+                    ),
                     widget.Chord(
                         chords_colors={
                             "launch": ("#ff0000", "#ffffff"),
                         },
                         name_transform=lambda name: name.upper(),
                     ),
-                    widget.Systray(),
-                    widget.Net(interface="wlan0"),
-                    widget.Clock(format="%d/%m/%Y %a %H:%M"),
-                    widget.QuickExit(),
+                    widget.Systray(
+                        background=COLORS[2],
+                    ),
+                    widget.Net(
+                        interface="wlan0",
+                        background=COLORS[2],
+                    ),
+                    widget.Clock(
+                        format="%B %d %Y %a %H:%M",
+                        background=COLORS[2],
+                    ),
+                    widget.QuickExit(
+                        background=COLORS[2],
+                    ),
                 ],
                 24,
                 # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
@@ -206,8 +248,6 @@ if __name__ in ["config", "__main__"]:
                         },
                         name_transform=lambda name: name.upper(),
                     ),
-                    widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                    widget.QuickExit(),
                 ],
                 24,
                 # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
