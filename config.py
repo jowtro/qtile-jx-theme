@@ -32,7 +32,7 @@ from libqtile.utils import guess_terminal
 from libqtile import hook, layout
 from libqtile.dgroups import simple_key_binder
 from libqtile.log_utils import logger
-from jx_bar import SCREEN1, SCREEN2
+from jx_bar_green import SCREEN1, SCREEN2
 
 logger.setLevel(logging.INFO)
 

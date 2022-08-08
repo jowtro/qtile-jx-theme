@@ -138,7 +138,12 @@ SCREEN1 = Screen(
 SCREEN2 = Screen(
     top=bar.Bar(
         [
-            widget.CurrentLayout(background=COLORS[2]),
+            widget.Sep(
+                linewidth=0,
+                padding=6,
+                foreground=COLORS[4],
+                background=COLORS[4],
+            ),
             widget.GroupBox(**GROUP_LAYOUT),
             widget.WindowName(background=COLORS[2], padding=0),
         ],
