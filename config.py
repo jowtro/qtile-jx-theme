@@ -31,8 +31,9 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 from libqtile import hook
+from libqtile.dgroups import simple_key_binder
 from libqtile.log_utils import logger
-from config_resources import COLORS
+from config_resources import COLORS, LEFT_ARROW_BACK, LEFT_ARROW_FRONT, GROUP_LAYOUT
 
 logger.setLevel(logging.INFO)
 
@@ -40,27 +41,24 @@ logger.setLevel(logging.INFO)
 @hook.subscribe.startup_once
 def autostart():
     # add nitrogen to the qtile startup
-    subprocess.Popen(["nitrogen", "--restore"])
+    subprocess.Popen(["bash", "/home/jowtro/.config/qtile/init_qtile.sh"])
 
 
 def init_layout_theme():
     return {
         "margin": 5,
-        "border_width": 2,
-        "border_focus": "#25B576",
+        "border_width": 1,
+        "border_focus": "#8FF0BC",
         "border_normal": "#17724B",
     }
+
 
 layout_theme = init_layout_theme()
 
 if __name__ in ["config", "__main__"]:
     mod = "mod4"
     terminal = guess_terminal()
-
-    logger.exception("Your message here 1")
-    logger.info("Your message here 2")
-    logger.warning("Your message here 3")
-
+    # region KEYS
     keys = [
         # A list of available commands that can be bound to keys can be found
         # at https://docs.qtile.org/en/latest/manual/config/lazy.html
@@ -118,49 +116,39 @@ if __name__ in ["config", "__main__"]:
         Key([mod], "space", lazy.next_layout(), desc="Toggle between layouts"),
         Key([mod, "shift"], "c", lazy.window.kill(), desc="Kill focused window"),
         Key([mod, "shift"], "q", lazy.reload_config(), desc="Reload the config"),
-        Key([mod], "p", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+        # Key([mod], "p", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+        Key([mod], "p", lazy.spawn("rofi -show run")),
         # Sound
         Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
-        Key(
-            [], "XF86AudioLowerVolume", lazy.spawn("amixer -c 0 sset Master 1- unmute")
-        ),
-        Key(
-            [], "XF86AudioRaiseVolume", lazy.spawn("amixer -c 0 sset Master 1+ unmute")
-        ),
+        Key([], "XF86AudioLowerVolume", lazy.spawn("amixer set Master 5%- unmute")),
+        Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer set Master 5%+ unmute")),
     ]
-    # Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    # endregion
 
-    groups = [Group(i) for i in "123456789"]
-
-    for i in groups:
-        keys.extend(
-            [
-                # mod1 + letter of group = switch to group
-                Key(
-                    [mod],
-                    i.name,
-                    lazy.group[i.name].toscreen(),
-                    desc="Switch to group {}".format(i.name),
-                ),
-                # mod1 + shift + letter of group = switch to & move focused window to group
-                Key(
-                    [mod, "shift"],
-                    i.name,
-                    lazy.window.togroup(i.name, switch_group=False),
-                    desc="Switch to & move focused window to group {}".format(i.name),
-                ),
-            ]
-        )
+    # groups = [Group(i) for i in "123456789"]
+    groups = [
+        Group("WWW", layout="monadtall"),
+        Group("TER", layout="max"),
+        Group("DEV", layout="monadtall"),
+        Group("TER", layout="monadtall"),
+        Group("VBOX", layout="monadtall"),
+        Group("MUS", layout="monadtall"),
+        Group("CHAT", layout="monadtall"),
+        Group("VID", layout="monadtall"),
+        Group("MISC", layout="floating"),
+    ]
+    # bind the groups above to MOD key + [0-9] and MOD + shift + [0-9] to sendo to another group
+    dgroups_key_binder = simple_key_binder("mod4")
 
     layouts = [
         layout.Columns(**layout_theme),
         layout.Max(),
+        layout.MonadTall(**layout_theme),
         # Try more layouts by unleashing below layouts.
-        layout.Stack(num_stacks=3),
+        # layout.Stack(num_stacks=3),
         layout.Bsp(border_focus="60a49c", border_normal="7CA39F"),
         # layout.Matrix(),
-        # layout.MonadTall(),
-        # layout.MonadWide(),
+        layout.MonadWide(**layout_theme),
         # layout.RatioTile(),
         # layout.Tile(),
         # layout.TreeTab(),
@@ -169,7 +157,7 @@ if __name__ in ["config", "__main__"]:
     ]
 
     widget_defaults = dict(
-        font="sans",
+        font="DejaVuSansMono Nerd Font Mono",
         fontsize=12,
         padding=3,
     )
@@ -183,75 +171,90 @@ if __name__ in ["config", "__main__"]:
                     widget.Sep(
                         linewidth=0,
                         padding=6,
-                        foreground=COLORS[0],
-                        background=COLORS[0],
+                        foreground=COLORS[4],
+                        background=COLORS[4],
                     ),
-                    widget.GroupBox(
-                        rounded=False,
-                        font="Ubuntu Bold",
-                        fontsize=12,
-                        borderwidth=1,
-                        active=COLORS[3],
-                        inactive=COLORS[3],
-                        highlight_method="block",
-                        highlight_color=COLORS[4],
-                        other_screen_border=COLORS[5],
-                        foreground=COLORS[3],
-                        background=COLORS[2],
-                    ),
-                    widget.CurrentLayout(
-                        background=COLORS[2],
-                    ),
+                    widget.GroupBox(**GROUP_LAYOUT),
+                    widget.CurrentLayout(background=COLORS[2]),
                     widget.Prompt(
                         background=COLORS[2],
                     ),
-                    widget.WindowName(
-                        background=COLORS[2],
-                        borderwidth=1,
-                    ),
+                    widget.WindowName(background=COLORS[2], padding=0),
                     widget.Chord(
                         chords_colors={
                             "launch": ("#ff0000", "#ffffff"),
                         },
                         name_transform=lambda name: name.upper(),
                     ),
-                    widget.Systray(
-                        background=COLORS[2],
+                    LEFT_ARROW_FRONT,
+                    widget.Systray(background=COLORS[4], padding=5),
+                    widget.TextBox(
+                        font="DejaVuSansMono Nerd Font Mono",
+                        text="\uf1eb",
+                        fontsize=27,
+                        foreground=COLORS[3],
+                        background=COLORS[4],
                     ),
                     widget.Net(
                         interface="wlan0",
-                        background=COLORS[2],
+                        format="{down} ↓↑ {up}",
+                        foreground=COLORS[3],
+                        background=COLORS[4],
+                        padding=0,
+                    ),
+                    LEFT_ARROW_BACK,
+                    widget.Sep(
+                        linewidth=30, foreground=COLORS[2], background=COLORS[2]
+                    ),
+                    LEFT_ARROW_FRONT,
+                    widget.TextBox(
+                        # thermal icon
+                        font="DejaVuSansMono Nerd Font Mono",
+                        text="\uf8c7",
+                        fontsize=30,
+                        foreground=COLORS[3],
+                        background=COLORS[4],
+                    ),
+                    widget.ThermalSensor(
+                        foreground=COLORS[3],
+                        background=COLORS[4],
+                        threshold=90,
+                        fmt="{}",
+                        padding=5,
+                    ),
+                    widget.TextBox(
+                        font="DejaVuSansMono Nerd Font Mono",
+                        text="\uf073",
+                        fontsize=30,
+                        foreground=COLORS[3],
+                        background=COLORS[4],
                     ),
                     widget.Clock(
                         format="%B %d %Y %a %H:%M",
-                        background=COLORS[2],
+                        background=COLORS[4],
+                    ),
+                    widget.Sep(
+                        foreground=COLORS[3],
+                        background=COLORS[4],
                     ),
                     widget.QuickExit(
-                        background=COLORS[2],
+                        default_text="\uf011",
+                        countdown_format="{}",
+                        fontsize=25,
+                        background=COLORS[4],
                     ),
                 ],
-                24,
-                # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-                # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+                20,
             ),
         ),
         Screen(
             top=bar.Bar(
                 [
-                    widget.CurrentLayout(),
-                    widget.GroupBox(),
-                    widget.Prompt(),
-                    widget.WindowName(),
-                    widget.Chord(
-                        chords_colors={
-                            "launch": ("#ff0000", "#ffffff"),
-                        },
-                        name_transform=lambda name: name.upper(),
-                    ),
+                    widget.CurrentLayout(background=COLORS[2]),
+                    widget.GroupBox(**GROUP_LAYOUT),
+                    widget.WindowName(background=COLORS[2], padding=0),
                 ],
-                24,
-                # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-                # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+                20,
             ),
         ),
     ]
@@ -273,7 +276,6 @@ if __name__ in ["config", "__main__"]:
         Click([mod], "Button2", lazy.window.bring_to_front()),
     ]
 
-    dgroups_key_binder = None
     dgroups_app_rules = []  # type: list
     follow_mouse_focus = True
     bring_front_click = False
@@ -303,12 +305,4 @@ if __name__ in ["config", "__main__"]:
     # When using the Wayland backend, this can be used to configure input devices.
     wl_input_rules = None
 
-    # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
-    # string besides java UI toolkits; you can see several discussions on the
-    # mailing lists, GitHub issues, and other WM documentation that suggest setting
-    # this string if your java app doesn't work correctly. We may as well just lie
-    # and say that we're a working one by default.
-    #
-    # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
-    # java that happens to be on java's whitelist.
     wmname = "LG3D"
