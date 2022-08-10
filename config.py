@@ -59,7 +59,8 @@ if __name__ in ["config", "__main__"]:
     terminal = guess_terminal()
     # region KEYS
     keys = [
-        Key([mod], "f", lazy.window.toggle_floating()),Key([mod], "f", lazy.window.toggle_floating()),     
+        Key([], "Print", lazy.spawn("flameshot gui")),
+        Key([mod], "f", lazy.window.toggle_floating()),
         # A list of available commands that can be bound to keys can be found
         # at https://docs.qtile.org/en/latest/manual/config/lazy.html
         # Switch between windows
