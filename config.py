@@ -36,7 +36,6 @@ if __name__ in ["config", "__main__"]:
     # region KEYS
     keys = [
         Key([], "Print", lazy.spawn("flameshot gui")),
-        Key([mod], "f", lazy.window.toggle_floating()),
         # A list of available commands that can be bound to keys can be found
         # at https://docs.qtile.org/en/latest/manual/config/lazy.html
         # Switch between windows
@@ -59,6 +58,7 @@ if __name__ in ["config", "__main__"]:
             lazy.layout.shuffle_right(),
             desc="Move window to the right",
         ),
+        Key([mod, "shift"], "t", lazy.window.toggle_floating(), desc="Toggle the floating state of the window."),
         Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
         Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
         # Grow windows. If current window is on the edge of screen and direction
