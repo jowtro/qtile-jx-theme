@@ -44,6 +44,7 @@ if __name__ in ["config", "__main__"]:
         Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
         Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
         Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
+        Key([mod], "Tab", lazy.layout.up(), desc="Move focus up"),
         Key([mod], "space", lazy.layout.next(), desc="Change to next layout"),
         # Move windows between left/right columns or move up/down in current stack.
         # Moving out of range in Columns layout will create new column.
@@ -52,12 +53,6 @@ if __name__ in ["config", "__main__"]:
             "h",
             lazy.layout.shuffle_left(),
             desc="Move window to the left",
-        ),
-        Key(
-            [mod, "shift"],
-            "l",
-            lazy.layout.shuffle_right(),
-            desc="Move window to the right",
         ),
         Key([mod, "shift"], "t", lazy.window.toggle_floating(), desc="Toggle the floating state of the window."),
         Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
@@ -95,7 +90,7 @@ if __name__ in ["config", "__main__"]:
         Key([mod, "shift"], "c", lazy.window.kill(), desc="Kill focused window"),
         Key([mod, "shift"], "q", lazy.reload_config(), desc="Reload the config"),
         # Key([mod], "p", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-        Key([mod], "p", lazy.spawn("rofi -show run")),
+        Key([mod], "p", lazy.spawn("rofi -i -show drun -modi drun -show-icons")),
         # Sound
         Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
         Key([], "XF86AudioLowerVolume", lazy.spawn("amixer set Master 5%- unmute")),
