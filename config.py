@@ -90,7 +90,8 @@ if __name__ in ["config", "__main__"]:
         Key([mod, "shift"], "c", lazy.window.kill(), desc="Kill focused window"),
         Key([mod, "shift"], "q", lazy.reload_config(), desc="Reload the config"),
         # Key([mod], "p", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-        Key([mod], "p", lazy.spawn("rofi -i -show drun -modi drun -show-icons")),
+        #Key([mod], "p", lazy.spawn("rofi -i -show drun -modi drun -show-icons")),
+        Key([mod], "p", lazy.spawn("rofi -combi-modi window,drun,ssh,run  -show combi -show-icons")),
         # Sound
         Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
         Key([], "XF86AudioLowerVolume", lazy.spawn("amixer set Master 5%- unmute")),
