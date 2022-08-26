@@ -105,11 +105,10 @@ if __name__ in ["config", "__main__"]:
         Group("WWW", layout="monadtall"),
         Group("TER", layout="max"),
         Group("DEV", layout="monadtall"),
-        Group("TER", layout="monadtall"),
-        Group("VBOX", layout="monadtall"),
-        Group("MUS", layout="monadtall"),
-        Group("CHAT", layout="monadtall"),
+        Group("TER2", layout="monadtall"),
         Group("VID", layout="monadtall"),
+        Group("CHAT", layout="monadtall"),
+        Group("MUS", layout="monadtall"),
         Group("MISC", layout="floating"),
     ]
     # bind the groups above to MOD key + [0-9] and MOD + shift + [0-9] to sendo to another group
