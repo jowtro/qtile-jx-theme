@@ -94,9 +94,9 @@ if __name__ in ["config", "__main__"]:
         #Key([mod], "p", lazy.spawn("rofi -i -show drun -modi drun -show-icons")),
         Key([mod], "p", lazy.spawn("rofi -combi-modi window,drun,ssh,run  -show combi -show-icons")),
         # Sound
-        Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
-        Key([], "XF86AudioLowerVolume", lazy.spawn("amixer set Master 5%- unmute")),
-        Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer set Master 5%+ unmute")),
+        Key(["mod2"], "XF86AudioMute", lazy.spawn("amixer -q set PCM toggle")),
+        Key(["mod2"], "XF86AudioLowerVolume", lazy.spawn("amixer set PCM 5%- unmute")),
+        Key(["mod2"], "XF86AudioRaiseVolume", lazy.spawn("amixer set PCM 5%+ unmute")),
     ]
     # endregion
 
