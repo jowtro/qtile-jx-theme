@@ -37,6 +37,7 @@ if __name__ in ["config", "__main__"]:
     keys = [
         Key([], "Print", lazy.spawn("flameshot gui")),
         Key([mod, "shift"], "l", lazy.spawn("xflock4")),
+        Key([mod], "b", lazy.spawn("google-chrome"), desc="Open browser"),
         # A list of available commands that can be bound to keys can be found
         # at https://docs.qtile.org/en/latest/manual/config/lazy.html
         # Switch between windows
