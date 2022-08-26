@@ -1,31 +1,6 @@
-# Copyright (c) 2010 Aldo Cortesi
-# Copyright (c) 2010, 2014 dequis
-# Copyright (c) 2012 Randall Ma
-# Copyright (c) 2012-2014 Tycho Andersen
-# Copyright (c) 2012 Craig Barnes
-# Copyright (c) 2013 horsik
-# Copyright (c) 2013 Tao Sauvage
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-
 import logging
 import subprocess
+import os
 from libqtile.config import Click, Drag, Group, Key, Match
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
@@ -40,8 +15,9 @@ logger.setLevel(logging.INFO)
 
 @hook.subscribe.startup_once
 def autostart():
+    homedir = os.getenv("HOME")
     # add nitrogen to the qtile startup
-    subprocess.Popen(["bash", "/home/jowtro/.config/qtile/init_qtile.sh"])
+    subprocess.Popen(["bash", f"{homedir}/.config/qtile/init_qtile.sh"])
 
 
 def init_layout_theme():
@@ -61,7 +37,8 @@ if __name__ in ["config", "__main__"]:
     # region KEYS
     keys = [
         Key([], "Print", lazy.spawn("flameshot gui")),
-        Key([mod], "f", lazy.window.toggle_floating()),
+        Key([mod, "shift"], "l", lazy.spawn("xflock4")),
+        Key([mod], "b", lazy.spawn("google-chrome"), desc="Open browser"),
         # A list of available commands that can be bound to keys can be found
         # at https://docs.qtile.org/en/latest/manual/config/lazy.html
         # Switch between windows
@@ -69,6 +46,7 @@ if __name__ in ["config", "__main__"]:
         Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
         Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
         Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
+        Key([mod], "Tab", lazy.layout.up(), desc="Move focus up"),
         Key([mod], "space", lazy.layout.next(), desc="Change to next layout"),
         # Move windows between left/right columns or move up/down in current stack.
         # Moving out of range in Columns layout will create new column.
@@ -78,12 +56,7 @@ if __name__ in ["config", "__main__"]:
             lazy.layout.shuffle_left(),
             desc="Move window to the left",
         ),
-        Key(
-            [mod, "shift"],
-            "l",
-            lazy.layout.shuffle_right(),
-            desc="Move window to the right",
-        ),
+        Key([mod, "shift"], "t", lazy.window.toggle_floating(), desc="Toggle the floating state of the window."),
         Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
         Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
         # Grow windows. If current window is on the edge of screen and direction
@@ -119,11 +92,12 @@ if __name__ in ["config", "__main__"]:
         Key([mod, "shift"], "c", lazy.window.kill(), desc="Kill focused window"),
         Key([mod, "shift"], "q", lazy.reload_config(), desc="Reload the config"),
         # Key([mod], "p", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-        Key([mod], "p", lazy.spawn("rofi -show run")),
+        #Key([mod], "p", lazy.spawn("rofi -i -show drun -modi drun -show-icons")),
+        Key([mod], "p", lazy.spawn("rofi -combi-modi window,drun,ssh,run  -show combi -show-icons")),
         # Sound
-        Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
-        Key([], "XF86AudioLowerVolume", lazy.spawn("amixer set Master 5%- unmute")),
-        Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer set Master 5%+ unmute")),
+        Key(["mod2"], "XF86AudioMute", lazy.spawn("amixer -q set PCM toggle")),
+        Key(["mod2"], "XF86AudioLowerVolume", lazy.spawn("amixer set PCM 5%- unmute")),
+        Key(["mod2"], "XF86AudioRaiseVolume", lazy.spawn("amixer set PCM 5%+ unmute")),
     ]
     # endregion
 
@@ -132,11 +106,10 @@ if __name__ in ["config", "__main__"]:
         Group("WWW", layout="monadtall"),
         Group("TER", layout="max"),
         Group("DEV", layout="monadtall"),
-        Group("TER", layout="monadtall"),
-        Group("VBOX", layout="monadtall"),
-        Group("MUS", layout="monadtall"),
-        Group("CHAT", layout="monadtall"),
+        Group("TER2", layout="monadtall"),
         Group("VID", layout="monadtall"),
+        Group("CHAT", layout="monadtall"),
+        Group("MUS", layout="monadtall"),
         Group("MISC", layout="floating"),
     ]
     # bind the groups above to MOD key + [0-9] and MOD + shift + [0-9] to sendo to another group
