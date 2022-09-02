@@ -183,11 +183,10 @@ SCREEN1 = Screen(
                 foreground=COLORS[3],
                 background=COLORS[4],
             ),
-            
             NetWatcher(
                 image_on="~/.config/qtile/assets/on.png",
                 image_off="~/.config/qtile/assets/off.png",
-                url_monitor="google.com",
+                host_monitor="google.com",
                 background=COLORS[4],
                 scale=False,
                 margin_y=2,

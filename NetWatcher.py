@@ -7,31 +7,21 @@ from libqtile.images import Img
 
 
 class NetWatcher(base.InLoopPollText, base._Widget, base.MarginMixin):
-    """A simple but flexible text-based clock"""
+    """A simple but flexible host monitor widget"""
 
     orientations = base.ORIENTATION_BOTH
     defaults = [
-        ("format", "%H:%M", "A Python datetime format string"),
-        ("update_interval", 10.0, "Update interval for the clock"),
-        (
-            "timezone",
-            None,
-            "The timezone to use for this clock, either as"
-            ' string if pytz or dateutil is installed (e.g. "US/Central" or'
-            " anything in /usr/share/zoneinfo), or as tzinfo (e.g."
-            " datetime.timezone.utc). None means the system local timezone and is"
-            " the default.",
-        ),
+        ("update_interval", 10.0, "Update interval em secconds for the clock"),
         ("scale", True, "Enable/Disable image scaling"),
         ("rotate", 0.0, "rotate the image in degrees counter-clockwise"),
-        ("image_on", None, "image_on"),
-        ("image_off", None, "image_off"),
-        ("url_monitor", None, "Image filename. Can contain '~'"),
+        ("image_on", None, "image_on file path"),
+        ("image_off", None, "image_off file path"),
+        ("host_monitor", None, "Url or server to Monitor"),
     ]
     DELTA = timedelta(seconds=0.5)
 
     def __init__(self, length=bar.CALCULATED, **config):
-        logger.info("INIT")
+        logger.info("INIT NetWatcher")
         self.img = None
         base.InLoopPollText.__init__(self, **config)
         self.add_defaults(NetWatcher.defaults)
@@ -46,7 +36,6 @@ class NetWatcher(base.InLoopPollText, base._Widget, base.MarginMixin):
 
     def _configure(self, qtile, _bar):
         base._Widget._configure(self, qtile, _bar)
-        logger.info("configure")
         self._update_image()
 
     def _update_image(self):
@@ -105,7 +94,6 @@ class NetWatcher(base.InLoopPollText, base._Widget, base.MarginMixin):
     def cmd_update(self, filename):
         old_length = self.calculate_length()
         self.filename = filename
-        logger.info(self.filename)
         self._update_image()
 
         if self.calculate_length() == old_length:
@@ -116,11 +104,8 @@ class NetWatcher(base.InLoopPollText, base._Widget, base.MarginMixin):
     def tick(self):
         self.cmd_update(self.poll())
 
-    # adding .5 to get a proper seconds value because glib could
-    # theoreticaly call our method too early and we could get something
-    # like (x-1).999 instead of x.000
     def poll(self):
-        resp = os.system(f"ping -c 1 {self.url_monitor}")
+        resp = os.system(f"ping -c 1 {self.host_monitor}")
         if resp == 0:
             return self.image_on
         else:
