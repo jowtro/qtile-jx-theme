@@ -2,8 +2,7 @@ import os
 from libqtile.widget.textbox import TextBox
 from libqtile import bar, widget
 from libqtile.config import Screen
-
-from TesteWidget import TesteWidget
+from NetWatcher import NetWatcher
 
 # load from env
 CITY_CODE = os.getenv("CITY_CODE_WEATHER")
@@ -72,7 +71,6 @@ SCREEN1 = Screen(
             widget.GroupBox(**GROUP_LAYOUT),
             widget.CurrentLayout(background=COLORS[2]),
             widget.WindowName(background=COLORS[2], padding=0),
-            TesteWidget(filename="~/on.png", background=COLORS[2], scale=False, margin_y=2),
             LEFT_ARROW_FRONT,
             widget.TextBox(
                 # thermal icon
@@ -176,6 +174,27 @@ SCREEN1 = Screen(
             widget.Wlan(
                 interface="wlan0",
                 foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            widget.TextBox(
+                font="DejaVuSansMono Nerd Font Mono",
+                text="| Net:",
+                fontsize=10,
+                foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            
+            NetWatcher(
+                image_on="~/.config/qtile/assets/on.png",
+                image_off="~/.config/qtile/assets/off.png",
+                url_monitor="google.com",
+                background=COLORS[4],
+                scale=False,
+                margin_y=2,
+            ),
+            widget.Sep(
+                linewidth=5,
+                foreground=COLORS[4],
                 background=COLORS[4],
             ),
             LEFT_ARROW_BACK,
