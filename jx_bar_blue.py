@@ -3,6 +3,8 @@ from libqtile.widget.textbox import TextBox
 from libqtile import bar, widget
 from libqtile.config import Screen
 
+from TesteWidget import TesteWidget
+
 # load from env
 CITY_CODE = os.getenv("CITY_CODE_WEATHER")
 BORDER_FOCUS = "#a2aacb"
@@ -70,6 +72,7 @@ SCREEN1 = Screen(
             widget.GroupBox(**GROUP_LAYOUT),
             widget.CurrentLayout(background=COLORS[2]),
             widget.WindowName(background=COLORS[2], padding=0),
+            TesteWidget(),
             LEFT_ARROW_FRONT,
             widget.TextBox(
                 # thermal icon
@@ -171,7 +174,7 @@ SCREEN1 = Screen(
                 background=COLORS[4],
             ),
             widget.Wlan(
-                interface='wlan0',
+                interface="wlan0",
                 foreground=COLORS[3],
                 background=COLORS[4],
             ),
