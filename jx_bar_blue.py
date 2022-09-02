@@ -72,7 +72,7 @@ SCREEN1 = Screen(
             widget.GroupBox(**GROUP_LAYOUT),
             widget.CurrentLayout(background=COLORS[2]),
             widget.WindowName(background=COLORS[2], padding=0),
-            TesteWidget(),
+            TesteWidget(filename="~/on.png", background=COLORS[2], scale=False, margin_y=2),
             LEFT_ARROW_FRONT,
             widget.TextBox(
                 # thermal icon
