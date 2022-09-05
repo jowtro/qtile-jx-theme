@@ -172,7 +172,7 @@ SCREEN1 = Screen(
                 background=COLORS[4],
             ),
             widget.Wlan(
-                interface="wlan0",
+                interface="wlo1",
                 foreground=COLORS[3],
                 background=COLORS[4],
             ),
