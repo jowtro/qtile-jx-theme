@@ -95,9 +95,9 @@ if __name__ in ["config", "__main__"]:
         #Key([mod], "p", lazy.spawn("rofi -i -show drun -modi drun -show-icons")),
         Key([mod], "p", lazy.spawn("rofi -combi-modi window,drun,ssh,run  -show combi -show-icons")),
         # Sound
-        Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
-        Key([], "XF86AudioLowerVolume", lazy.spawn("amixer set Master 5%- unmute")),
-        Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer set Master 5%+ unmute")),
+        Key([], "XF86AudioMute", lazy.spawn("amixer -q set PCM toggle")),
+        Key([], "XF86AudioLowerVolume", lazy.spawn("amixer set PCM 5%- unmute")),
+        Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer set PCM 5%+ unmute")),
     ]
     # endregion
 
@@ -110,6 +110,7 @@ if __name__ in ["config", "__main__"]:
         Group("VID", layout="monadtall"),
         Group("CHAT", layout="monadtall"),
         Group("MUS", layout="monadtall"),
+        Group("EMAIL", layout="max"),
         Group("MISC", layout="floating"),
     ]
     # bind the groups above to MOD key + [0-9] and MOD + shift + [0-9] to sendo to another group
