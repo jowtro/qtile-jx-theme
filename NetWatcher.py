@@ -1,5 +1,7 @@
 import os
 from datetime import timedelta
+
+# from threading import Thread
 from libqtile import bar
 from libqtile.log_utils import logger
 from libqtile.widget import base
@@ -29,38 +31,36 @@ class NetWatcher(base.InLoopPollText, base._Widget, base.MarginMixin):
         base._Widget.__init__(self, length, **config)
         self.add_defaults(NetWatcher.defaults)
         self.add_defaults(base.MarginMixin.defaults)
-        self.filename = self.image_off
 
         # make the default 0 instead
         self._variable_defaults["margin"] = 0
 
     def _configure(self, qtile, _bar):
         base._Widget._configure(self, qtile, _bar)
-        self._update_image()
+        self._update_image(self.image_on)
 
-    def _update_image(self):
+    def _update_image(self, filename):
         self.img = None
 
-        if not self.filename:
+        if not filename:
             logger.warning("Image filename not set!")
             return
 
-        self.filename = os.path.expanduser(self.filename)
-        if not os.path.exists(self.filename):
-            logger.warning("Image does not exist: %s", self.filename)
+        filename = os.path.expanduser(filename)
+        if not os.path.exists(filename):
+            logger.warning("Image does not exist: %s", filename)
             return
 
-        img = Img.from_path(self.filename)
-        self.img = img
-        img.theta = self.rotate
+        self.img = Img.from_path(filename)
+        self.img.theta = self.rotate
         if not self.scale:
             return
         if self.bar.horizontal:
             new_height = self.bar.height - (self.margin_y * 2)
-            img.resize(height=new_height)
+            self.img.resize(height=new_height)
         else:
             new_width = self.bar.width - (self.margin_x * 2)
-            img.resize(width=new_width)
+            self.img.resize(width=new_width)
 
     def draw(self):
         if self.img is None:
@@ -93,8 +93,7 @@ class NetWatcher(base.InLoopPollText, base._Widget, base.MarginMixin):
 
     def cmd_update(self, filename):
         old_length = self.calculate_length()
-        self.filename = filename
-        self._update_image()
+        self._update_image(filename)
 
         if self.calculate_length() == old_length:
             self.draw()
@@ -102,11 +101,12 @@ class NetWatcher(base.InLoopPollText, base._Widget, base.MarginMixin):
             self.bar.draw()
 
     def tick(self):
-        self.cmd_update(self.poll())
-
-    def poll(self):
-        resp = os.system(f"ping -c 1 {self.host_monitor}")
-        if resp == 0:
-            return self.image_on
-        else:
-            return self.image_off
+        home = os.getenv("HOME")
+        with open(f"{home}/.config/qtile/test.txt", "r", encoding="UTF8") as file:
+            txt = file.readline()
+            if txt == "0":
+                logger.info("NET DOWN")
+                self.cmd_update(self.image_off)
+            else:
+                logger.info("NET UP")
+                self.cmd_update(self.image_on)
