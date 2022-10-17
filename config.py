@@ -38,7 +38,7 @@ if __name__ in ["config", "__main__"]:
     keys = [
         Key([], "Print", lazy.spawn("flameshot gui")),
         Key([mod, "shift"], "l", lazy.spawn("xflock4")),
-        Key([mod], "b", lazy.spawn("google-chrome-stable"), desc="Open browser"),
+        Key([mod], "b", lazy.spawn("brave-browser"), desc="Open browser"),
         # A list of available commands that can be bound to keys can be found
         # at https://docs.qtile.org/en/latest/manual/config/lazy.html
         # Switch between windows
@@ -95,9 +95,9 @@ if __name__ in ["config", "__main__"]:
         #Key([mod], "p", lazy.spawn("rofi -i -show drun -modi drun -show-icons")),
         Key([mod], "p", lazy.spawn("rofi -combi-modi window,drun,ssh,run  -show combi -show-icons")),
         # Sound
-        Key([], "XF86AudioMute", lazy.spawn("amixer -q set PCM toggle")),
-        Key([], "XF86AudioLowerVolume", lazy.spawn("amixer set PCM 5%- unmute")),
-        Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer set PCM 5%+ unmute")),
+        Key([], "XF86AudioMute", lazy.spawn("amixer -D pulse set Master toggle")),
+        Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -D pulse set Master 5%- unmute")),
+        Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -D pulse set Master 5%+ unmute")),
     ]
     # endregion
 
@@ -119,7 +119,7 @@ if __name__ in ["config", "__main__"]:
     layouts = [
         layout.Max(),
         layout.MonadTall(**layout_theme),
-        layout.Columns(**layout_theme),
+        #layout.Columns(**layout_theme),
         # layout.TreeTab(**layout_theme),
         layout.Bsp(**layout_theme),
         layout.MonadWide(**layout_theme),
@@ -175,6 +175,7 @@ if __name__ in ["config", "__main__"]:
             Match(title="pinentry"),  # GPG key password entry
             Match(title="gimp"),
             Match(title="nitrogen"),
+            Match(title="DBeaver"),
         ]
     )
     auto_fullscreen = True

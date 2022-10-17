@@ -166,6 +166,24 @@ SCREEN1 = Screen(
                 background=COLORS[4],
             ),
             widget.Sep(
+                linewidth=2,
+                foreground=COLORS[4],
+                background=COLORS[4],
+            ),
+            widget.TextBox(
+                font="DejaVuSansMono Nerd Font Mono",
+                text="|",
+                fontsize=10,
+                foreground=COLORS[3],
+                background=COLORS[4],
+            ),
+            widget.Bluetooth(),
+            widget.BatteryIcon(
+                foreground=COLORS[1],
+                background=COLORS[4],
+                update_interval=10,
+            ),
+            widget.Sep(
                 linewidth=1,
                 padding=6,
                 foreground=COLORS[1],
@@ -186,7 +204,7 @@ SCREEN1 = Screen(
             NetWatcher(
                 image_on="~/.config/qtile/assets/on.png",
                 image_off="~/.config/qtile/assets/off.png",
-                host_monitor="google.com",
+                host_monitor="comms3.cartrack.pt",
                 background=COLORS[4],
                 scale=False,
                 margin_y=2,

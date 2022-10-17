@@ -105,8 +105,8 @@ class NetWatcher(base.InLoopPollText, base._Widget, base.MarginMixin):
         with open(f"{home}/.config/qtile/test.txt", "r", encoding="UTF8") as file:
             txt = file.readline()
             if txt == "0":
-                logger.info("NET DOWN")
+                #logger.info("NET DOWN")
                 self.cmd_update(self.image_off)
             else:
-                logger.info("NET UP")
+                #logger.info("NET UP")
                 self.cmd_update(self.image_on)
